@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Select Character</title>
+  <style>
+    body { background: #111; color: #fff; text-align: center; font-family: monospace; }
+    h1 { margin-top: 20px; }
+    .char-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding: 40px 0;
+    }
+    .char {
+      width: 140px;
+      height: 140px;
+      border: 2px solid #555;
+      background-color: #222;
+      cursor: pointer;
+    }
+    .char img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <h1>Choose Your Driver</h1>
+  <div class="char-container">
+    <div class="char" onclick="selectChar(1)"><img src='assets/char1.png'></div>
+    <div class="char" onclick="selectChar(2)"><img src='assets/char2.png'></div>
+    <div class="char" onclick="selectChar(3)"><img src='assets/char3.png'></div>
+    <div class="char" onclick="selectChar(4)"><img src='assets/char4.png'></div>
+  </div>
+
+  <script>
+    function selectChar(id) {
+      localStorage.setItem('driver', id);
+      location.href = 'game.html';
+    }
+  </script>
+</body>
+</html>

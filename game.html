@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Final Lap Game</title>
+  <style>
+    body { margin: 0; background: #000; }
+    canvas { display: block; margin: auto; background: #222; }
+  </style>
+</head>
+<body>
+  <canvas id="gameCanvas" width="512" height="384"></canvas>
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const sprite = new Image();
+    sprite.src = 'assets/final_lap_minimal_sprite_sheet.png';
+
+    function showError(msg) {
+      ctx.fillStyle = "#fff";
+      ctx.font = "16px monospace";
+      ctx.fillText("ERROR: " + msg, 20, 30);
+      console.error(msg);
+    }
+
+    fetch('assets/assets.json')
+      .then(res => {
+        if (!res.ok) throw new Error('JSON not found');
+        return res.json();
+      })
+      .then(data => {
+        sprite.onload = () => {
+          try {
+            const car = data.sprites.car;
+            ctx.drawImage(sprite, car.x, car.y, car.width, car.height, 180, 250, car.width, car.height);
+            ctx.fillStyle = "#0f0";
+            ctx.fillText("Auto loaded", 20, 20);
+          } catch (e) {
+            showError("Car draw failed: " + e.message);
+          }
+        };
+        sprite.onerror = () => showError("Sprite image not found");
+      })
+      .catch(err => showError("JSON load error: " + err.message));
+  </script>
+</body>
+</html>
