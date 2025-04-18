@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>LEMON LEMON // FINAL LAP</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      overflow: hidden;
+      touch-action: none;
+    }
+    canvas {
+      display: block;
+    }
+    #startScreen {
+      position: absolute;
+      width: 100vw;
+      height: 100vh;
+      background: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    #startImage {
+      width: 70vw;
+      max-width: 500px;
+    }
+    #startButton {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1.5em;
+      margin-top: 20px;
+      padding: 10px 20px;
+      color: yellow;
+      background: darkred;
+      border: 3px solid yellow;
+      border-radius: 10px;
+      cursor: pointer;
+      text-shadow: 2px 2px black;
+    }
+    .hud {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-family: monospace;
+      font-size: 1em;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div id="startScreen">
+    <img id="startImage" src="final_lap_start_screen_small.png" alt="Start Screen">
+    <div id="startButton" onclick="startGame()">START</div>
+  </div>
+
+  <canvas id="gameCanvas" width="800" height="600" style="display:none;"></canvas>
+  <div class="hud" id="hud" style="display:none">
+    TIME: <span id="time">60</span> &nbsp;
+    SCORE: <span id="score">0</span> &nbsp;
+    LAP: <span id="lap">1</span>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const timeDisplay = document.getElementById('time');
+    const scoreDisplay = document.getElementById('score');
+    const lapDisplay = document.getElementById('lap');
+
+    let startTime;
+    let carX = canvas.width / 2;
+    let speed = 0;
+    let accelerating = false;
+    let steerLeft = false;
+    let steerRight = false;
+    let timeLeft = 60;
+    let score = 0;
+    let lap = 1;
+
+    function startGame() {
+      document.getElementById('startScreen').style.display = 'none';
+      document.getElementById('hud').style.display = 'block';
+      canvas.style.display = 'block';
+      startTime = performance.now();
+      requestAnimationFrame(update);
+    }
+
+    function update(timestamp) {
+      const elapsed = (timestamp - startTime) / 1000;
+      timeLeft = Math.max(0, 60 - elapsed);
+      score = Math.floor(elapsed * 100);
+
+      timeDisplay.textContent = timeLeft.toFixed(0);
+      scoreDisplay.textContent = score;
+      lapDisplay.textContent = lap;
+
+      if (timeLeft <= 0) return;
+
+      ctx.fillStyle = 'skyblue';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = 'gray';
+      ctx.fillRect(0, 400, canvas.width, 200);
+
+      ctx.fillStyle = 'white';
+      for (let i = 0; i < canvas.width; i += 80) {
+        ctx.fillRect(i + (timestamp / 10 % 80), 500, 40, 10);
+      }
+
+      ctx.fillStyle = 'red';
+      ctx.fillRect(carX - 25, 500, 50, 40);
+
+      requestAnimationFrame(update);
+    }
+  </script>
+</body>
+</html>
